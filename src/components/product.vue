@@ -1,13 +1,15 @@
 <template>
-  <div class="product">
+  <div class="product" @click="goGoodsDetails(productData.id)">
     <div class="productImg">
-      <img :src="productData.img_url" alt="">
+      <img v-lazy="productData.img_url" alt="">
     </div>
-    <div class="title">{{ productData.title }}</div>
-    <div class="info">
-      <span class="price"><span class="yen">&yen;</span>{{ productData.market_price }}</span>
-      <span class="buy">{{ productData.likes }}人购买</span>
-    </div>
+    <slot name="info">
+      <div class="title">{{ productData.title }}</div>
+      <div class="info">
+        <span class="price"><span class="yen">&yen;</span>{{ productData.market_price }}</span>
+        <span class="buy">{{ productData.likes }}人购买</span>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -20,6 +22,11 @@ export default {
       type: Object
     }
   },
+  methods:{
+    goGoodsDetails(id){
+      this.$emit('GoodsDetails',id)
+    }
+  }
 }
 </script>
 

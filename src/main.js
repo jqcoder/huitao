@@ -4,6 +4,7 @@ import router from './router'
 import store from './store'
 import './vantui'
 import './assets/css/normalize.css'
+import '../node_modules/nprogress/nprogress.css'
 
 Vue.config.productionTip = false
 

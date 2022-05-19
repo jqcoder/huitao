@@ -3,7 +3,6 @@
     <van-nav-bar
       :title="title"
       left-text="返回"
-      right-text="按钮"
       left-arrow
       @click-left="$router.back()"
       v-show="isShowNavBar"

@@ -20,9 +20,10 @@
       </van-swipe-item>
     </van-swipe>
 
-    <!--    &lt;!&ndash;  九宫格  &ndash;&gt;-->
+    <!-- 九宫格 -->
     <van-grid :gutter="10" :border="false">
-      <van-grid-item v-for="value in menuData" :key="value.text" :icon="value.img" :text="value.text"/>
+      <van-grid-item v-for="value in menuData" :key="value.text"
+                     :icon="value.img" :text="value.text" :to="value.to"/>
     </van-grid>
 
     <!-- 分割线 -->
@@ -30,6 +31,7 @@
 
     <!-- 商品列表 -->
     <div class="products">
+      <!-- productData传给商品组件 -->
       <product v-for="item in product" :key="item.id" :productData="item"></product>
     </div>
 
@@ -53,14 +55,14 @@ export default {
       carouselData: [],
       product: [],
       menuData: [
-        {img: require('@/assets/images/1.png'), text: '惠淘超市'},
-        {img: require('@/assets/images/2.png'), text: '惠淘超市2'},
-        {img: require('@/assets/images/3.png'), text: '惠淘超市3'},
-        {img: require('@/assets/images/4.png'), text: '惠淘超市4'},
-        {img: require('@/assets/images/5.png'), text: '惠淘超市5'},
-        {img: require('@/assets/images/6.png'), text: '惠淘超市6'},
-        {img: require('@/assets/images/7.png'), text: '惠淘超市7'},
-        {img: require('@/assets/images/8.png'), text: '惠淘超市8'},
+        {img: require('@/assets/images/1.png'), text: '惠淘超市', to: '/goodlist'},
+        {img: require('@/assets/images/2.png'), text: '惠淘超市2', to: '/goodlist'},
+        {img: require('@/assets/images/3.png'), text: '惠淘超市3', to: '/goodlist'},
+        {img: require('@/assets/images/4.png'), text: '惠淘超市4', to: '/goodlist'},
+        {img: require('@/assets/images/5.png'), text: '惠淘超市5', to: '/goodlist'},
+        {img: require('@/assets/images/6.png'), text: '惠淘超市6', to: '/goodlist'},
+        {img: require('@/assets/images/7.png'), text: '惠淘超市7', to: '/goodlist'},
+        {img: require('@/assets/images/8.png'), text: '惠淘超市8', to: '/goodlist'},
       ]
     }
   },
@@ -74,11 +76,11 @@ export default {
       this.carouselData = res.message
     },
     async getProductData() {
-      let res = await fetchProductList(1,12)
+      let res = await fetchProductList(1, 12)
       this.product = res.message
     }
   },
-  components:{
+  components: {
     product,
     backTop
   }
@@ -86,34 +88,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-// 搜索
 .home {
   position: relative;
   overflow: hidden;
   padding-bottom: 50px;
+  // 搜索
+  .van-sticky {
+    .search {
+      display: flex;
+      max-width: 750px;
+      min-width: 350px;
+      margin: 0 auto;
+      height: 50px;
+      background-color: #c4261d;
 
-  .search {
-    display: flex;
-    height: 50px;
-    background-color: #c4261d;
-
-    .logo {
-      width: 50px;
-      height: 100%;
-
-      img {
-        width: 100%;
+      .logo {
+        width: 50px;
         height: 100%;
+
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+
+      .van-search {
+        flex-grow: 1;
+        height: 100%;
+        background-color: #c4261d;
       }
     }
-
-    .van-search {
-      flex-grow: 1;
-      height: 100%;
-      background-color: #c4261d;
-    }
-
   }
 
   .swiper-bg {
@@ -128,6 +132,7 @@ export default {
     border-bottom-right-radius: 100%;
   }
 
+  //轮播图
   .van-swipe {
     width: 95%;
     height: 140px;
@@ -143,7 +148,8 @@ export default {
     }
   }
 
-  .products{
+  // 商品列表
+  .products {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;

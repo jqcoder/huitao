@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import NProgress from 'nprogress'
+
+NProgress.configure({ showSpinner: false });
 
 Vue.use(VueRouter)
 
-// import home from '../views/'
 const routes = [
   {
     path: '/',
@@ -40,14 +42,29 @@ const routes = [
       }
     ]
   },
-  // {
-  //   path: 'goodlist',
-  //   component: () => import('../views/goodlist')
-  // }
+  {
+    path: '/goodlist',
+    component: () => import('../views/Goodlist'),
+    meta:{
+      title:'商品列表'
+    }
+  }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+
+router.beforeEach((to, from,next) => {
+  NProgress.start();
+  next()
+  return false
+})
+
+router.afterEach((to, from) => {
+  NProgress.done();
+  return false
 })
 
 export default router

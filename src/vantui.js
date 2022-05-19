@@ -11,7 +11,10 @@ import {
   SwipeItem,
   Grid,
   GridItem,
-  Divider
+  Lazyload,
+  Divider,
+  PullRefresh,
+  List
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -26,5 +29,7 @@ Vue.use(Swipe)
 Vue.use(SwipeItem)
 Vue.use(Grid)
 Vue.use(GridItem)
+Vue.use(Lazyload)
 Vue.use(Divider)
-
+Vue.use(PullRefresh)
+Vue.use(List)
