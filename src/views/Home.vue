@@ -32,7 +32,7 @@
     <!-- 商品列表 -->
     <div class="products">
       <!-- productData传给商品组件 -->
-      <product v-for="item in product" :key="item.id" :productData="item"></product>
+      <product v-for="item in product" :key="item.id" :productData="item" @GoodsDetails="GoodsDetails"></product>
     </div>
 
     <!-- 回到顶部 -->
@@ -78,6 +78,9 @@ export default {
     async getProductData() {
       let res = await fetchProductList(1, 12)
       this.product = res.message
+    },
+    GoodsDetails(id){
+      this.$router.push(`/goodsDetail/${id}`)
     }
   },
   components: {
@@ -144,6 +147,17 @@ export default {
       img {
         height: 100%;
         width: 100%;
+      }
+    }
+  }
+
+  // 九宫格
+  .van-grid{
+    .van-grid-item{
+      border-radius: 10px;
+      overflow: hidden;
+      .van-grid-item__content{
+        border-radius: 10px;
       }
     }
   }

@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <van-sticky>
     <van-nav-bar
       :title="title"
       left-text="返回"
@@ -7,6 +8,7 @@
       @click-left="$router.back()"
       v-show="isShowNavBar"
     />
+    </van-sticky>
 
     <router-view></router-view>
   </div>
@@ -39,6 +41,7 @@ html {
 }
 
 #app {
+  color: #333;
   min-width: 350px;
   max-width: 750px;
   margin: 0 auto;

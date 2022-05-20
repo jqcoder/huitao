@@ -14,7 +14,10 @@ import {
   Lazyload,
   Divider,
   PullRefresh,
-  List
+  List,
+  GoodsAction,
+  GoodsActionButton,
+  GoodsActionIcon
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -33,3 +36,6 @@ Vue.use(Lazyload)
 Vue.use(Divider)
 Vue.use(PullRefresh)
 Vue.use(List)
+Vue.use(GoodsAction)
+Vue.use(GoodsActionButton)
+Vue.use(GoodsActionIcon)

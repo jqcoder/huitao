@@ -48,6 +48,13 @@ const routes = [
     meta:{
       title:'商品列表'
     }
+  },
+  {
+    path: '/goodsdetail/:id',
+    component: ()=> import('../views/GoodsDetail'),
+    meta:{
+      title: '商品详情'
+    }
   }
 ]
 
