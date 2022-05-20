@@ -3,7 +3,7 @@
     <router-view></router-view>
     <van-tabbar v-model="active" active-color="#ee0a24" inactive-color="#000">
       <van-tabbar-item icon="home-o" to="/index/home">首页</van-tabbar-item>
-      <van-tabbar-item icon="cart-o" to="/index/shopcar">购物车</van-tabbar-item>
+      <van-tabbar-item icon="cart-o" to="/index/shopcar" :badge="goodsCarNum">购物车</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/index/user">我的</van-tabbar-item>
     </van-tabbar>
   </div>
@@ -14,7 +14,8 @@ export default {
   name: 'index',
   data () {
     return {
-      active: 0
+      active: 0,
+      goodsCarNum:0
     }
   },
   watch: {
@@ -30,6 +31,14 @@ export default {
         this.active = routerMap[name]
       },
       immediate: true
+    },
+    'this.$store.state.goodsCar':{
+      handler(){
+        this.$store.state.goodsCar.forEach(item=>{
+          this.goodsCarNum += item.buyNum
+        })
+      },
+      immediate:true,
     }
   },
 }

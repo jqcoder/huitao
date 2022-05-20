@@ -17,7 +17,12 @@ import {
   List,
   GoodsAction,
   GoodsActionButton,
-  GoodsActionIcon
+  GoodsActionIcon,
+  Sku,
+  Button,
+  SwipeCell,
+  Card,
+Stepper
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -39,3 +44,8 @@ Vue.use(List)
 Vue.use(GoodsAction)
 Vue.use(GoodsActionButton)
 Vue.use(GoodsActionIcon)
+Vue.use(Sku)
+Vue.use(Button)
+Vue.use(SwipeCell)
+Vue.use(Card)
+Vue.use(Stepper)

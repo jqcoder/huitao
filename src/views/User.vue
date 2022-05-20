@@ -1,5 +1,8 @@
 <template>
-  <div>user</div>
+  <div class="user">
+    我是登录页面
+
+  </div>
 </template>
 
 <script>

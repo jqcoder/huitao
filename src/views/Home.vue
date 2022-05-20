@@ -102,7 +102,7 @@ export default {
       max-width: 750px;
       min-width: 350px;
       margin: 0 auto;
-      height: 50px;
+      height: 44px;
       background-color: #c4261d;
 
       .logo {

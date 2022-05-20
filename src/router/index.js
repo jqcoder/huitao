@@ -29,7 +29,8 @@ const routes = [
         component: () => import('../views/Shopcar'),
         meta: {
           name: 'shopcar',
-          isIndexPage: false
+          isIndexPage: false,
+          title: '购物车'
         }
       },
       {
@@ -37,7 +38,7 @@ const routes = [
         component: () => import('../views/User'),
         meta: {
           name: 'user',
-          isIndexPage: true
+          isIndexPage: false
         }
       }
     ]

@@ -22,15 +22,30 @@
     </div>
 
     <!--    商品详情-->
-    <div class="goods-content" v-html="GoodsDetail.content"></div>
+    <div class="goods-content">
+      <van-divider :style="{'fontSize':'18px'}">商品信息</van-divider>
+      <div v-html="GoodsDetail.content"></div>
+    </div>
 
+
+    <!--    商品规格-->
+    <van-sku
+      v-model="isShowSku"
+      :sku="sku"
+      :goods="goods"
+      :goods-id="goodsId"
+      :hide-stock="sku.hide_stock"
+      :show-add-cart-btn="isShowGoodsCar"
+      @buy-clicked="onBuyClicked"
+      @add-cart="onAddCartClicked"
+    />
 
     <!--    商品导航-->
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服"/>
-      <van-goods-action-icon icon="cart-o" text="购物车" badge="0"/>
-      <van-goods-action-button type="warning" text="加入购物车"/>
-      <van-goods-action-button type="danger" text="立即购买"/>
+      <van-goods-action-icon icon="cart-o" text="购物车" :badge="goodsCarNum"/>
+      <van-goods-action-button type="warning" text="加入购物车" @click="openSku(true)"/>
+      <van-goods-action-button type="danger" text="立即购买" @click="openSku(false)"/>
     </van-goods-action>
   </div>
 </template>
@@ -48,30 +63,80 @@ export default {
   data() {
     return {
       goodsId: this.$route.params.id,
-      GoodsCarousel: [],
+      GoodsCarousel: [], // 轮播图数据
+      current: 0, // 轮播到第几张
       GoodsDetail: {},
-      current: 0,
+
+      isShowSku: false, // 显示商品购买选择
+      isShowGoodsCar: true, // 加入购物车按钮
+      sku: {
+        tree: [],
+        price: "0.00", // 默认价格（单位元）
+        stock_num: 5, // 商品总库存
+        hide_stock: false, // 是否隐藏剩余库存
+      },
+      goods: {
+        // 数据结构见下方文档
+        picture: ""
+      },
+
+      goodsCarNum: 0 //所有购物车的数量
     }
   },
   async created() {
     // 轮播图和详情数据
-    let GoodsCarousel = await fetchGoodsCarousel(this.goodsId)
+    let {message} = await fetchGoodsCarousel(this.goodsId)
     let GoodsDetail = await fetchGoodsDetail(this.goodsId)
-    this.GoodsCarousel = GoodsCarousel.message.map(item => {
-      return item.src
-    })
+    this.GoodsCarousel = message.map(item => item.src)
     this.GoodsDetail = GoodsDetail.message
-    console.log(this.GoodsDetail)
+    // sku数据
+    this.sku.price = this.GoodsDetail.sell_price
+    this.sku.stock_num = this.GoodsDetail.stock_quantity
+    this.goods.picture = this.GoodsCarousel[0]
   },
   methods: {
     reviseCarouseIndex(index) {
       this.current = index
     },
+    // 轮播图预览
     previewImg() {
       ImagePreview({
         images: this.GoodsCarousel,
         startPosition: this.current,
       });
+    },
+    openSku(isopen) {
+      this.isShowSku = true
+      this.isShowGoodsCar = isopen
+    },
+    // 立即购买按钮
+    onBuyClicked() {
+      console.log(123)
+    },
+    // 购物车
+    onAddCartClicked({selectedNum}) {
+      // 收集数据
+      const goodsInfo = {
+        id: this.goodsId,
+        isCheck: true,
+        buyNum: selectedNum,
+        price: this.GoodsDetail.sell_price
+      }
+
+      this.$store.commit('AddToGoodsCar', goodsInfo)
+      this.$toast.success('添加成功')
+      this.isShowSku = false
+      this.goodsCarNum += selectedNum
+    }
+  },
+  watch: {
+    'this.$store.state.goodsCar': {
+      handler() {
+        this.$store.state.goodsCar.forEach(item=>{
+          this.goodsCarNum += item.buyNum
+        })
+      },
+      immediate: true,
     }
   }
 }
@@ -79,13 +144,13 @@ export default {
 
 <style lang="scss" scoped>
 .goods-detail {
-  padding-top: 5px;
+  padding: 5px 0 55px 0;
   background-color: #f6f6f6;
 
   .van-swipe {
     width: 98%;
     height: 240px;
-    margin: 0px auto 5px;
+    margin: 0 auto 5px;
     border-radius: 6px;
     background-color: #fff;
 
@@ -146,6 +211,7 @@ export default {
       width: 100%;
       height: 100%;
     }
+
     ::v-deep table {
       width: 100%;
       height: 100%;
