@@ -68,6 +68,9 @@ export default new Vuex.Store({
       return state.goodsCar.length <= 0
     },
     // 提交是否禁用
+    isNoSubmit(state,getters){
+      return !getters.getGoodsCQuantity > 0
+    }
   },
   mutations: {
     // 添加购物车商品

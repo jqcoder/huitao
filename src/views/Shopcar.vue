@@ -1,7 +1,6 @@
 <template>
   <div class="shopcar">
     <!-- 当购物车没有商品-->
-
     <van-empty
       class="custom-image"
       :image="require('../assets/images/car.png')"
@@ -11,6 +10,7 @@
       <van-button type="danger" @click="goHome">去首页</van-button>
     </van-empty>
 
+    {{$store.getters.isNoSubmit}}
     <!-- 当购物车有商品 -->
     <div class="have-goods">
       <van-swipe-cell v-for="(item,index) in GoodsInfo" :key="item.id">
@@ -25,7 +25,7 @@
             :thumb="item.thumb_path"
           >
             <template #footer>
-              <van-stepper :value="getAllGoodsNum[item.id]" @change="updateGoodsNum" :name="item.id" min="0"/>
+              <van-stepper :value="getAllGoodsNum[item.id]" @change="updateGoodsNum" :name="item.id"/>
             </template>
           </van-card>
         </div>
@@ -36,7 +36,7 @@
     </div>
 
     <!--购物车核算-->
-    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="getCarisNoGoods" button-text="提交订单">
+    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="isNoSubmit" button-text="提交订单">
       <van-checkbox :value="getGoodsAllStatus"
                     @click="updateAllCheck(getGoodsAllStatus)">全选
       </van-checkbox>
@@ -64,7 +64,8 @@ export default {
       'getGoodsAllStatus',
       'getAllGoodsId',
       'getAllGoodsNum',
-      'getCarisNoGoods'
+      'getCarisNoGoods',
+      'isNoSubmit',
     ])
   },
   data() {
@@ -77,7 +78,14 @@ export default {
     goHome() {
       this.$router.push('/')
     },
-    // 更新单个的状态
+    // 获取购物车商品的信息
+    async getGoodsInfo() {
+      if(this.getAllGoodsId){
+        let {message} = await fetchGoodscar(this.getAllGoodsId)
+        this.GoodsInfo = message
+      }
+    },
+    // 更新单个商品的状态
     updateSingleCheck(id) {
       this.$store.commit('updateSingleCheck', id)
     },
@@ -87,26 +95,19 @@ export default {
     },
     // 更新购物车某个商品的数量
     updateGoodsNum(num, {name: id}) {
-      // console.log('前')
       this.$store.commit('updateGoodsNum', {num, id})
     },
     // 删除商品
     deleteGoods(index,id) {
       this.$store.commit('deleteGoods', id)
       this.GoodsInfo.splice(index, 1)
-    },
-    // 获取购物车商品的信息
-    async getGoodsInfo() {
-      if(this.getAllGoodsId){
-        let {message} = await fetchGoodscar(this.getAllGoodsId)
-        this.GoodsInfo = message
-      }
     }
   },
   created() {
     this.getGoodsInfo()
   },
   filters:{
+    // 价格补零
     zeroPadding(value){
       return value.toFixed(2,0)
     }
@@ -117,6 +118,10 @@ export default {
 <style lang="scss" scoped>
 .shopcar {
   background-color: #f7f6f6;
+
+  .have-goods{
+    padding-bottom: 134px;
+  }
 
   .shopcard {
     display: flex;
