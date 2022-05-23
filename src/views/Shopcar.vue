@@ -9,11 +9,10 @@
     >
       <van-button type="danger" @click="goHome">去首页</van-button>
     </van-empty>
-
-    {{$store.getters.isNoSubmit}}
     <!-- 当购物车有商品 -->
     <div class="have-goods">
       <van-swipe-cell v-for="(item,index) in GoodsInfo" :key="item.id">
+        {{item.id}}
         <div class="shopcard">
           <van-checkbox v-model="getGoodsSingleStatus[item.id]"
                         @click="updateSingleCheck(item.id)"/>
@@ -52,11 +51,11 @@
 import {fetchGoodscar} from '@/api/goodscar'
 
 // store辅助函数
-import { mapState, mapGetters } from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 
 export default {
   name: 'Shopcar',
-  computed:{
+  computed: {
     ...mapState(['goodsCar']),
     ...mapGetters([
       'getGoodsSingleStatus',
@@ -80,7 +79,7 @@ export default {
     },
     // 获取购物车商品的信息
     async getGoodsInfo() {
-      if(this.getAllGoodsId){
+      if (this.getAllGoodsId) {
         let {message} = await fetchGoodscar(this.getAllGoodsId)
         this.GoodsInfo = message
       }
@@ -98,18 +97,21 @@ export default {
       this.$store.commit('updateGoodsNum', {num, id})
     },
     // 删除商品
-    deleteGoods(index,id) {
+    deleteGoods(index, id) {
       this.$store.commit('deleteGoods', id)
-      this.GoodsInfo.splice(index, 1)
+      let findIndex = this.GoodsInfo.findIndex(item => {
+        return Number(item.id) === id
+      })
+      this.GoodsInfo.splice(findIndex, 1)
     }
   },
   created() {
     this.getGoodsInfo()
   },
-  filters:{
+  filters: {
     // 价格补零
-    zeroPadding(value){
-      return value.toFixed(2,0)
+    zeroPadding(value) {
+      return value.toFixed(2, 0)
     }
   }
 }
@@ -119,7 +121,7 @@ export default {
 .shopcar {
   background-color: #f7f6f6;
 
-  .have-goods{
+  .have-goods {
     padding-bottom: 134px;
   }
 

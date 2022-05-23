@@ -1,6 +1,8 @@
 <template>
   <div class="user">
-    我是登录页面
+    <div class="head-bg">
+
+    </div>
 
   </div>
 </template>
@@ -11,6 +13,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
+.user{
+  .head-bg{
+    height: 180px;
+    background-color: #3590f8;
+  }
+}
 </style>

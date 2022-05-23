@@ -105,7 +105,7 @@ export default new Vuex.Store({
     // 删除商品
     deleteGoods(state, id) {
       let findIndex = state.goodsCar.findIndex(item => {
-        return item.id === id
+        return Number(item.id) === id
       })
       state.goodsCar.splice(findIndex, 1)
     }
