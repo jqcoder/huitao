@@ -1,116 +1,133 @@
 <template>
   <div class="shopcar">
     <!-- 当购物车没有商品-->
-    <div class="no-goods" v-show="noGoods">
-      <div class="img">
-        <img src="../assets/images/car.png" alt="">
-      </div>
-      <p class="title">你的购物车空空如也</p>
-      <van-button type="danger" @click="goHome">去首页</van-button>
-    </div>
 
+    <van-empty
+      class="custom-image"
+      :image="require('../assets/images/car.png')"
+      description="你的购物车空空如也"
+      v-show="getCarisNoGoods"
+    >
+      <van-button type="danger" @click="goHome">去首页</van-button>
+    </van-empty>
 
     <!-- 当购物车有商品 -->
     <div class="have-goods">
-      <van-swipe-cell v-for="(item,index) in $store.state.goodsCar">
-        <div>
-          <van-checkbox v-model="$store.getters.getGoodsCarSingleStatus[index]" @click="updateSingleCheck(item.isCheck,index)"/>
+      <van-swipe-cell v-for="(item,index) in GoodsInfo" :key="item.id">
+        <div class="shopcard">
+          <van-checkbox v-model="getGoodsSingleStatus[item.id]"
+                        @click="updateSingleCheck(item.id)"/>
           <van-card
-            :num="item.buyNum"
-            :price="item.price"
-            desc="描述信息"
-            title="商品标题"
+            :num="getAllGoodsNum[item.id]"
+            :price="item.sell_price | zeroPadding"
+            :title="item.title"
             class="goods-card"
-            thumb="https://img01.yzcdn.cn/vant/cat.jpeg"
+            :thumb="item.thumb_path"
           >
             <template #footer>
-              <van-stepper :value="item.buyNum" @change="updateGoodsNum" :name="index" />
+              <van-stepper :value="getAllGoodsNum[item.id]" @change="updateGoodsNum" :name="item.id" min="0"/>
             </template>
           </van-card>
         </div>
         <template #right>
-          <van-button square text="删除" type="danger" class="delete-button"/>
+          <van-button square text="删除" type="danger" class="delete-button" @click="deleteGoods(index, item.id)"/>
         </template>
       </van-swipe-cell>
     </div>
 
-
     <!--购物车核算-->
-    <van-submit-bar :price="$store.getters.goodsCarPriceTotal" button-text="提交订单">
-      <van-checkbox :value="$store.getters.getGoodsCarAllStatus" @click="updateAllCheck($store.getters.getGoodsCarAllStatus)">全选</van-checkbox>
+    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="getCarisNoGoods" button-text="提交订单">
+      <van-checkbox :value="getGoodsAllStatus"
+                    @click="updateAllCheck(getGoodsAllStatus)">全选
+      </van-checkbox>
       <template #tip>
-        你的收货地址不支持同城送, <span>修改地址</span>
+        <span>你购买的东西永远不会发货</span>
       </template>
     </van-submit-bar>
   </div>
 </template>
 
 <script>
+// 请求
+import {fetchGoodscar} from '@/api/goodscar'
+
+// store辅助函数
+import { mapState, mapGetters } from 'vuex'
+
 export default {
   name: 'Shopcar',
+  computed:{
+    ...mapState(['goodsCar']),
+    ...mapGetters([
+      'getGoodsSingleStatus',
+      'getGoodsCarPriceTotal',
+      'getGoodsAllStatus',
+      'getAllGoodsId',
+      'getAllGoodsNum',
+      'getCarisNoGoods'
+    ])
+  },
   data() {
     return {
-      noGoods: true,
+      GoodsInfo: [],
     }
   },
   methods: {
+    // 回首页
     goHome() {
       this.$router.push('/')
     },
     // 更新单个的状态
-    updateSingleCheck(status,index){
-      this.$store.commit('updateSingleCheck',{
-        status,
-        index
-      })
+    updateSingleCheck(id) {
+      this.$store.commit('updateSingleCheck', id)
     },
-    updateAllCheck(status){
-      this.$store.commit('updateAllCheck',!status)
+    // 更新全选的状态
+    updateAllCheck(status) {
+      this.$store.commit('updateAllCheck', !status)
     },
-
-    updateGoodsNum(num,{name:index}){
-      this.$store.commit('updateGoodsNum',{num,index})
+    // 更新购物车某个商品的数量
+    updateGoodsNum(num, {name: id}) {
+      // console.log('前')
+      this.$store.commit('updateGoodsNum', {num, id})
+    },
+    // 删除商品
+    deleteGoods(index,id) {
+      this.$store.commit('deleteGoods', id)
+      this.GoodsInfo.splice(index, 1)
+    },
+    // 获取购物车商品的信息
+    async getGoodsInfo() {
+      if(this.getAllGoodsId){
+        let {message} = await fetchGoodscar(this.getAllGoodsId)
+        this.GoodsInfo = message
+      }
     }
-
   },
-  mounted() {
-    this.noGoods = this.$store.state.goodsCar.length <= 0
+  created() {
+    this.getGoodsInfo()
+  },
+  filters:{
+    zeroPadding(value){
+      return value.toFixed(2,0)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .shopcar {
-  height: 80vh;
   background-color: #f7f6f6;
 
-  .no-goods {
+  .shopcard {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 40px;
-
-    .img {
-      width: 160px;
-      height: 160px;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-
-    .title {
-      color: #969799;
-      font-size: 14px;
-      margin-bottom: 30px;
-    }
-
-  }
-
-  .goods-card {
-    margin: 0;
     background-color: #fff;
+
+    .goods-card {
+      margin: 0;
+      background-color: #fff;
+      flex: 1;
+    }
+
   }
 
   .delete-button {

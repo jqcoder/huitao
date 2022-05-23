@@ -3,19 +3,24 @@
     <router-view></router-view>
     <van-tabbar v-model="active" active-color="#ee0a24" inactive-color="#000">
       <van-tabbar-item icon="home-o" to="/index/home">首页</van-tabbar-item>
-      <van-tabbar-item icon="cart-o" to="/index/shopcar" :badge="goodsCarNum">购物车</van-tabbar-item>
+      <van-tabbar-item icon="cart-o" to="/index/shopcar" :badge="getGoodsCQuantity">购物车</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/index/user">我的</van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script>
+// store辅助函数
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'index',
+  computed: {
+    ...mapGetters(['getGoodsCQuantity'])
+  },
   data () {
     return {
       active: 0,
-      goodsCarNum:0
     }
   },
   watch: {
@@ -32,14 +37,6 @@ export default {
       },
       immediate: true
     },
-    'this.$store.state.goodsCar':{
-      handler(){
-        this.$store.state.goodsCar.forEach(item=>{
-          this.goodsCarNum += item.buyNum
-        })
-      },
-      immediate:true,
-    }
   },
 }
 </script>

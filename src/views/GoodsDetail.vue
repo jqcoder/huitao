@@ -1,7 +1,7 @@
 <template>
   <div class="goods-detail">
     <!--    轮播和图片预览-->
-    <van-swipe class="my-swipe" :autoplay="3000" @change="reviseCarouseIndex">
+    <van-swipe class="my-swipe" :autoplay="3000" @change="reviseCarouselIndex">
       <van-swipe-item v-for="item in GoodsCarousel" :key="item" @click="previewImg">
         <img v-lazy="item" alt="">
       </van-swipe-item>
@@ -43,7 +43,7 @@
     <!--    商品导航-->
     <van-goods-action>
       <van-goods-action-icon icon="chat-o" text="客服"/>
-      <van-goods-action-icon icon="cart-o" text="购物车" :badge="goodsCarNum"/>
+      <van-goods-action-icon icon="cart-o" text="购物车" to="/index/shopcar"  :badge="getGoodsCQuantity"/>
       <van-goods-action-button type="warning" text="加入购物车" @click="openSku(true)"/>
       <van-goods-action-button type="danger" text="立即购买" @click="openSku(false)"/>
     </van-goods-action>
@@ -57,9 +57,14 @@ import {fetchGoodsCarousel, fetchGoodsDetail} from '@/api/goodsdetail'
 // 组件
 import {ImagePreview} from 'vant';
 
+// store辅助函数
+import { mapGetters } from 'vuex'
+
 export default {
   name: "GoodsDetail",
-
+  computed: {
+    ...mapGetters(['getGoodsCQuantity'])
+  },
   data() {
     return {
       goodsId: this.$route.params.id,
@@ -79,8 +84,6 @@ export default {
         // 数据结构见下方文档
         picture: ""
       },
-
-      goodsCarNum: 0 //所有购物车的数量
     }
   },
   async created() {
@@ -95,7 +98,7 @@ export default {
     this.goods.picture = this.GoodsCarousel[0]
   },
   methods: {
-    reviseCarouseIndex(index) {
+    reviseCarouselIndex(index) {
       this.current = index
     },
     // 轮播图预览
@@ -111,9 +114,9 @@ export default {
     },
     // 立即购买按钮
     onBuyClicked() {
-      console.log(123)
+      console.log('立即购买')
     },
-    // 购物车
+    // 购物车按钮
     onAddCartClicked({selectedNum}) {
       // 收集数据
       const goodsInfo = {
@@ -122,23 +125,11 @@ export default {
         buyNum: selectedNum,
         price: this.GoodsDetail.sell_price
       }
-
       this.$store.commit('AddToGoodsCar', goodsInfo)
       this.$toast.success('添加成功')
       this.isShowSku = false
-      this.goodsCarNum += selectedNum
     }
   },
-  watch: {
-    'this.$store.state.goodsCar': {
-      handler() {
-        this.$store.state.goodsCar.forEach(item=>{
-          this.goodsCarNum += item.buyNum
-        })
-      },
-      immediate: true,
-    }
-  }
 }
 </script>
 

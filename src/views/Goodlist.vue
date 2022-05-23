@@ -7,7 +7,7 @@
       @load="onLoad"
     >
       <div class="my-product">
-        <product v-for="item in goodsList" :productData="item" @GoodsDetails="GoodsDetails">
+        <product v-for="item in goodsList" :key="item.title" :productData="item" @GoodsDetails="GoodsDetails">
           <template #info>
               <div class="product-info">
                   <div class="title"><span>{{item.title}}</span></div>

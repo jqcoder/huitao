@@ -6,7 +6,7 @@
     <slot name="info">
       <div class="title">{{ productData.title }}</div>
       <div class="info">
-        <span class="price"><span class="yen">&yen;</span>{{ productData.market_price }}</span>
+        <span class="price"><span class="yen">&yen;</span>{{ productData.sell_price }}</span>
         <span class="buy">{{ productData.likes }}人购买</span>
       </div>
     </slot>

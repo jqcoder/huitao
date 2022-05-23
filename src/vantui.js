@@ -22,7 +22,8 @@ import {
   Button,
   SwipeCell,
   Card,
-Stepper
+  Stepper,
+  Empty
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -49,3 +50,4 @@ Vue.use(Button)
 Vue.use(SwipeCell)
 Vue.use(Card)
 Vue.use(Stepper)
+Vue.use(Empty)
