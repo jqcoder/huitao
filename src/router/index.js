@@ -66,6 +66,13 @@ const routes = [
     meta:{
       title: '登录'
     }
+  },
+  {
+    path: '/register',
+    component: ()=> import('@/views/Register'),
+    meta:{
+      title: '注册'
+    }
   }
 ]
 
