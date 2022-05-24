@@ -7,7 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // strict: true,
   state: {
-    goodsCar: []
+    goodsCar: [],
+    userInfo: {},
+    token: ""
   },
   getters: {
     // 获取购物车总价格
@@ -37,12 +39,12 @@ export default new Vuex.Store({
     // 购物车全选的状态
     getGoodsAllStatus(state) {
       let status = false
-      if(state.goodsCar.length>0){
+      if (state.goodsCar.length > 0) {
         status = state.goodsCar.some(item => {
           return item.isCheck === false
         })
         return !status
-      }else{
+      } else {
         return status
       }
 
@@ -68,7 +70,7 @@ export default new Vuex.Store({
       return state.goodsCar.length <= 0
     },
     // 提交是否禁用
-    isNoSubmit(state,getters){
+    isNoSubmit(state, getters) {
       return !getters.getGoodsCQuantity > 0
     }
   },
@@ -108,6 +110,19 @@ export default new Vuex.Store({
         return Number(item.id) === id
       })
       state.goodsCar.splice(findIndex, 1)
+    },
+    // 添加用户信息和token
+    addUserOrToken(state, {userInfo, token}) {
+      state.userInfo = userInfo
+      state.token = token
+    },
+    // 删除用户信息和token(退出登录或者篡改)
+    removeUserOrToken(state) {
+      state.userInfo = {}
+      state.token = ''
+    },
+    uploadUserImg(state, src) {
+      state.userInfo.avatar = src
     }
   },
   actions: {},

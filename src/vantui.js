@@ -24,7 +24,14 @@ import {
   Card,
   Stepper,
   Empty,
-  ActionSheet
+  ActionSheet,
+  Form,
+  Field,
+  Image as VanImage,
+  Cell,
+  CellGroup,
+  Loading,
+  Uploader
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -53,3 +60,11 @@ Vue.use(Card)
 Vue.use(Stepper)
 Vue.use(Empty)
 Vue.use(ActionSheet)
+Vue.use(Form)
+Vue.use(Field)
+Vue.use(VanImage)
+Vue.use(Cell)
+Vue.use(CellGroup)
+Vue.use(ActionSheet)
+Vue.use(Loading)
+Vue.use(Uploader)

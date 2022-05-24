@@ -77,7 +77,12 @@ export default {
     },
     async getProductData() {
       let res = await fetchProductList(1, 12)
-      this.product = res.message
+      if(!res.message){
+        this.product = []
+      }else{
+        this.product = res.message
+      }
+
     },
     GoodsDetails(id){
       this.$router.push(`/goodsDetail/${id}`)

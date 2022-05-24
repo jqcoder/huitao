@@ -12,7 +12,6 @@
     <!-- 当购物车有商品 -->
     <div class="have-goods">
       <van-swipe-cell v-for="(item,index) in GoodsInfo" :key="item.id">
-        {{item.id}}
         <div class="shopcard">
           <van-checkbox v-model="getGoodsSingleStatus[item.id]"
                         @click="updateSingleCheck(item.id)"/>
@@ -119,7 +118,6 @@ export default {
 
 <style lang="scss" scoped>
 .shopcar {
-  background-color: #f7f6f6;
 
   .have-goods {
     padding-bottom: 134px;
