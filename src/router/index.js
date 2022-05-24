@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import store from "@/store";
 import NProgress from 'nprogress'
 
-NProgress.configure({ showSpinner: false });
+NProgress.configure({showSpinner: false});
 
 Vue.use(VueRouter)
 
@@ -49,29 +49,50 @@ const routes = [
   {
     path: '/goodlist',
     component: () => import('@/views/Goodlist'),
-    meta:{
-      title:'商品列表'
+    meta: {
+      title: '商品列表'
     }
   },
   {
     path: '/goodsdetail/:id',
-    component: ()=> import('@/views/GoodsDetail'),
-    meta:{
+    component: () => import('@/views/GoodsDetail'),
+    meta: {
       title: '商品详情'
     }
   },
   {
     path: '/login',
-    component: ()=> import('@/views/Login'),
-    meta:{
+    component: () => import('@/views/Login'),
+    meta: {
       title: '登录'
     }
   },
   {
     path: '/register',
-    component: ()=> import('@/views/Register'),
-    meta:{
+    component: () => import('@/views/Register'),
+    meta: {
       title: '注册'
+    }
+  },
+  {
+    path: '/address',
+    component: () => import('@/views/Address'),
+    meta: {
+      title: '收货地址'
+    }
+  },
+  {
+    path: '/addaddress',
+    component: () => import('@/views/AddAddress'),
+    meta: {
+      title: '新增地址'
+    }
+  },
+  {
+    path: '/editaddress/:addressInfo',
+    component: () => import('@/views/EditAddress'),
+    meta: {
+      title: '修改地址'
     }
   }
 ]
@@ -81,19 +102,18 @@ const router = new VueRouter({
 })
 
 
-router.beforeEach((to, from,next) => {
+router.beforeEach((to, from, next) => {
   NProgress.start();
   // 判断是否要权限
-  if(to.meta.LoginPermission){
-    console.log(store.state.token)
+  if (to.meta.LoginPermission) {
     // 判断有没有token
-    if(store.state.token){
+    if (store.state.token) {
       next()
-    }else{
+    } else {
       // 没有token就打回登录页面 and 带上上个网页的路径
       next(`/login?redirect=${to.fullPath}`)
     }
-  }else{
+  } else {
     next()
   }
   return false

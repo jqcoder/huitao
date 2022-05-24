@@ -1,7 +1,6 @@
 <template>
   <div class="user">
     <div class="head-bg">
-      <!--      <van-icon name="setting-o" />-->
 
       <div class="userInfo">
         <van-image :src="'http://api.w0824.com/'+ $store.state.userInfo.avatar">
@@ -15,7 +14,7 @@
       <div class="setting">
         <van-cell-group>
           <van-cell title="我的订单" value="全部订单"/>
-          <van-cell title="收货地址" is-link/>
+          <van-cell title="收货地址" is-link to="/address" />
           <van-cell title="设置" is-link @click="show = true"/>
           <van-cell title="关于惠淘" value="1.0.0"/>
           <van-button type="danger" block @click="signOut">退出登录</van-button>
@@ -66,6 +65,9 @@ export default {
         this.$store.commit('uploadUserImg', result.src)
       }
       this.$toast(result.message)
+    },
+    aaa(){
+
     }
   },
 }

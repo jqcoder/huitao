@@ -31,7 +31,6 @@ instance.interceptors.request.use(function (config) {
 // 添加响应拦截器
 instance.interceptors.response.use(function (response) {
   Toast.clear();
-  console.log(response.data)
   if(response.data.status === 40001){
     store.commit('removeUserOrToken')
     router.push('/login')

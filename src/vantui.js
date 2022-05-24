@@ -31,7 +31,9 @@ import {
   Cell,
   CellGroup,
   Loading,
-  Uploader
+  Uploader,
+  AddressEdit,
+  AddressList
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -68,3 +70,5 @@ Vue.use(CellGroup)
 Vue.use(ActionSheet)
 Vue.use(Loading)
 Vue.use(Uploader)
+Vue.use(AddressEdit)
+Vue.use(AddressList);

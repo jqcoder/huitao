@@ -120,6 +120,7 @@ export default new Vuex.Store({
     removeUserOrToken(state) {
       state.userInfo = {}
       state.token = ''
+      state.goodsCar = []
     },
     uploadUserImg(state, src) {
       state.userInfo.avatar = src
