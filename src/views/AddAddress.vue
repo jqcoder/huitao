@@ -33,6 +33,7 @@ export default {
       }
       addressInfo.isDefault = address.isDefault ? 1 : 0
       let result = await fetchAddUserAddress(this.$store.state.userInfo.id,addressInfo)
+      console.log(result)
       this.$toast(result.message)
       this.$router.back()
     },
