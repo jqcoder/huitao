@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {fetchRegister} from '@/api/register'
+import {fetchRegister} from '@/api/user'
 
 export default {
   name: "Register",

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {fetchCarousel} from '@/api/login'
+import {fetchLogin} from '@/api/user'
 
 export default {
   name: "Login",
@@ -43,7 +43,7 @@ export default {
   methods: {
     // 表单提交
     async onSubmit(userInfo) {
-      let loginRes = await fetchCarousel(userInfo)
+      let loginRes = await fetchLogin(userInfo)
       if (loginRes.status === 0) {
         // 添加到store
         this.$store.commit('addUserOrToken', {
