@@ -1,4 +1,4 @@
-import instance from './request'
+import instance from './request/request'
 
 export function fetchGoodsCarousel(id){
   return  instance.get(`api/getthumbimages/${id}/`)

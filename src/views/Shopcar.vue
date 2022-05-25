@@ -57,7 +57,7 @@
     </div>
 
     <!--购物车核算-->
-    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="isNoSubmit" button-text="提交订单">
+    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="isNoSubmit" @submit="onSubmit" button-text="提交订单">
       <van-checkbox :value="getGoodsAllStatus"
                     @click="updateAllCheck(getGoodsAllStatus)">全选
       </van-checkbox>
@@ -72,9 +72,13 @@
 // 请求
 import {fetchGoodscar} from '@/api/goodscar'
 import {fetchGetUserAddress} from '@/api/address'
+import {fetchCommitOrder} from '@/api/order'
 
 // store辅助函数
 import {mapState, mapGetters} from 'vuex'
+
+// 工具
+import {genOrderId} from '@/util/tools'
 
 export default {
   name: 'Shopcar',
@@ -87,6 +91,8 @@ export default {
       'getAllGoodsId',
       'getAllGoodsNum',
       'getCarisNoGoods',
+      'getAllGoodsNumTotal',
+      'getAllGoodsChecked',
       'isNoSubmit',
     ])
   },
@@ -170,6 +176,44 @@ export default {
       } else {
         this.defaultAddress = addressList[0]
       }
+    },
+    async onSubmit() {
+      let user_id = this.$store.state.userInfo.id
+      if (!user_id) {
+        this.$router.push('/login')
+      }
+
+      // 获取订单参数
+      let orderData = {
+        user_id,
+        order_id: genOrderId(),
+        address_id: this.defaultAddress.id,
+        total_price: this.getGoodsCarPriceTotal / 100,
+        number: this.getAllGoodsNumTotal,
+        goods_ids: this.getAllGoodsChecked
+      }
+
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '提交中...',
+        forbidClick: true,
+        overlay: true // 遮罩
+      });
+
+      // 提交订单
+      let {message, status} = await fetchCommitOrder(orderData)
+
+      // 提交成功-清空购物车（还有vuex）
+      if (status === 0) {
+        this.GoodsInfo = [];
+        this.$store.commit('clearGoodsCar');
+        this.$router.replace('/order')
+      }
+
+
+      this.$toast.clear();
+
+
     }
   },
   async created() {

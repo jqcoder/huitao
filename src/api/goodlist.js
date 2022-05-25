@@ -1,4 +1,4 @@
-import instance from './request'
+import instance from './request/request'
 
 export function fetchGoodsList(page=1,pagesize=10 ){
   return  instance.get(`api/getgoods?pageindex=${page}&pagesize=${pagesize}`)

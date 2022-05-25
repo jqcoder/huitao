@@ -65,6 +65,22 @@ export default new Vuex.Store({
       })
       return Status
     },
+    // 获取购物车商品的总数量
+    getAllGoodsNumTotal(state) {
+      let Total = 0
+      state.goodsCar.forEach(item => {
+        if(item.isCheck) Total += item.buyNum
+      })
+      return Total
+    },
+    // 获取购物车打勾的商品id
+    getAllGoodsChecked(state) {
+      let Total = []
+      state.goodsCar.forEach(item => {
+        if(item.isCheck) Total.push(item.id)
+      })
+      return Total.join()
+    },
     // 获取购物车有无商品
     getCarisNoGoods(state) {
       return state.goodsCar.length <= 0
@@ -110,6 +126,10 @@ export default new Vuex.Store({
         return Number(item.id) === id
       })
       state.goodsCar.splice(findIndex, 1)
+    },
+    // 清空购物车
+    clearGoodsCar(state){
+      state.goodsCar = []
     },
     // 添加用户信息和token
     addUserOrToken(state, {userInfo, token}) {

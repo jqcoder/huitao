@@ -1,4 +1,4 @@
-import instance from './request'
+import instance from './request/request'
 
 export function fetchLogin(user){
   return  instance.post('/api/login',user)

@@ -1,4 +1,4 @@
-import instance from './request'
+import instance from './request/request'
 
 // 获取用户地址
 export function fetchGetUserAddress(id) {
