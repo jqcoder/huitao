@@ -33,7 +33,6 @@ export default {
   //
   computed: {
     oldAddress() {
-      console.log(JSON.parse(this.$route.params.addressInfo))
       let address = this.address
 
       address.areaCode = JSON.parse(this.$route.params.addressInfo).areaCode.split('-')[2]

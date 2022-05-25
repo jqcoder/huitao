@@ -1,14 +1,37 @@
 <template>
   <div class="shopcar">
+    <!--  先判断购物车有没有商品-->
+    <div v-if="GoodsInfo.length > 0">
+      <!--      判断有没有地址-->
+      <div v-if="hasAddress" class="hasAddress">
+        <div class="icon">
+          <van-icon name="location-o"/>
+        </div>
+        <div>
+          <div>
+            <span>{{ defaultAddress.name }} / {{ defaultAddress.tel }} / {{ defaultAddress.postalCode }}</span>
+          </div>
+          <div><span>{{ defaultAddress.province }}{{ defaultAddress.city }}
+          {{ defaultAddress.country }}{{ defaultAddress.addressDetail }}</span></div>
+          <div>
+          </div>
+        </div>
+      </div>
+      <!-- 当没有地址 -->
+      <van-button v-else plain type="info" to="/addaddress" block>添加地址</van-button>
+    </div>
+
     <!-- 当购物车没有商品-->
     <van-empty
       class="custom-image"
       :image="require('../assets/images/car.png')"
       description="你的购物车空空如也"
-      v-show="getCarisNoGoods"
+      v-else
     >
       <van-button type="danger" @click="goHome">去首页</van-button>
     </van-empty>
+
+
     <!-- 当购物车有商品 -->
     <div class="have-goods">
       <van-swipe-cell v-for="(item,index) in GoodsInfo" :key="item.id">
@@ -48,6 +71,7 @@
 <script>
 // 请求
 import {fetchGoodscar} from '@/api/goodscar'
+import {fetchGetUserAddress} from '@/api/address'
 
 // store辅助函数
 import {mapState, mapGetters} from 'vuex'
@@ -69,6 +93,8 @@ export default {
   data() {
     return {
       GoodsInfo: [],
+      hasAddress: false,
+      defaultAddress: {}
     }
   },
   methods: {
@@ -102,10 +128,55 @@ export default {
         return Number(item.id) === id
       })
       this.GoodsInfo.splice(findIndex, 1)
+    },
+    // 地址
+    async _fetchGetUserAddress() {
+      // 获取所有id来判断是否有商品
+      if (!this.getAllGoodsId) {
+        return
+      }
+
+      //判断是否有登录
+      let userId = this.$store.state.userInfo.id
+      if (!userId) {
+        this.$dialog.alert({
+          message: '请先登录哦',
+        }).then(() => {
+          this.$router.replace('/login')
+        });
+        return;
+      }
+
+      // 获取地址
+      let addressList = await fetchGetUserAddress(userId)
+      // 判断有没有地址
+      this.hasAddress = !!addressList.length
+      if (!this.hasAddress) {
+        this.$dialog({message: '请先完善收货地址'});
+        return
+      }
+
+      // 只有有1个的话，采用第一个
+      if (addressList.length === 1) {
+        this.defaultAddress = addressList[0]
+      }
+
+      // 多个的话先获取默认地址
+      let DefaultAddressIndex = addressList.findIndex(item => {
+        return item.isDefault === 1
+      })
+      if (DefaultAddressIndex !== -1) {// 没有默认地址就获取第一个地址
+        this.defaultAddress = addressList[DefaultAddressIndex]
+      } else {
+        this.defaultAddress = addressList[0]
+      }
     }
   },
-  created() {
+  async created() {
+    // 获取购物车商品
     this.getGoodsInfo()
+    // 处理用户地址
+    this._fetchGetUserAddress()
   },
   filters: {
     // 价格补零
@@ -118,6 +189,8 @@ export default {
 
 <style lang="scss" scoped>
 .shopcar {
+  background-color: #f6f6f6;
+  height: 100vh;
 
   .have-goods {
     padding-bottom: 134px;
@@ -144,6 +217,23 @@ export default {
     margin-bottom: 50px;
   }
 
+
+  .hasAddress {
+    display: flex;
+    align-items: center;
+    padding: 4px 10px;
+    background-color: #fff;
+    border-radius: 6px;
+    margin: 6px auto;
+    box-sizing: border-box;
+    width: 98%;
+
+    .icon {
+      margin-right: 20px;
+      color: red;
+      font-size: 20px;
+    }
+  }
 }
 
 

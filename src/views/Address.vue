@@ -2,13 +2,13 @@
   <div class="address">
     <van-empty v-if="addressList.length < 1" description="您还没添加地址，请添加地址"/>
 
-    <van-address-list
-      v-model="chosenAddressId"
-      :list="addressList"
-      default-tag-text="默认"
-      @add="onAdd"
-      @edit="onEdit"
-    />
+      <van-address-list
+        v-model="chosenAddressId"
+        :list="addressList"
+        default-tag-text="默认"
+        @add="onAdd"
+        @edit="onEdit"
+      />
   </div>
 </template>
 
@@ -22,6 +22,7 @@ export default {
       // 选中的地址（id）
       chosenAddressId: '0',
       addressList: [],
+      loading: true,
     }
   },
   created() {
@@ -32,13 +33,12 @@ export default {
     async getAddress(id) {
       let addressList = await fetchGetUserAddress(id)
 
-      console.log(addressList)
-
       // 边界处理（设置默认打勾状态）
       if (addressList.length < 1) {
         return
       }
       if (addressList.length === 1) {
+        console.log(addressList[0].id)
         this.chosenAddressId = addressList[0].id
       }
 

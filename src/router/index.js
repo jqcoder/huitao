@@ -32,7 +32,7 @@ const routes = [
           name: 'shopcar',
           isIndexPage: false,
           title: '购物车',
-          LoginPermission: true // 登录权限
+          // LoginPermission: true // 登录权限
         }
       },
       {
@@ -93,6 +93,13 @@ const routes = [
     component: () => import('@/views/EditAddress'),
     meta: {
       title: '修改地址'
+    }
+  },
+  {
+    path: '/order',
+    component: () => import('@/views/Order'),
+    meta: {
+      title: '我的订单'
     }
   }
 ]

@@ -33,7 +33,10 @@ import {
   Loading,
   Uploader,
   AddressEdit,
-  AddressList
+  AddressList,
+  Icon,
+  Tab,
+  Tabs,
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -71,4 +74,7 @@ Vue.use(ActionSheet)
 Vue.use(Loading)
 Vue.use(Uploader)
 Vue.use(AddressEdit)
-Vue.use(AddressList);
+Vue.use(AddressList)
+Vue.use(Icon)
+Vue.use(Tab)
+Vue.use(Tabs)

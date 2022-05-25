@@ -13,7 +13,7 @@
 
       <div class="setting">
         <van-cell-group>
-          <van-cell title="我的订单" value="全部订单"/>
+          <van-cell title="我的订单" is-link to="/order" value="全部订单"/>
           <van-cell title="收货地址" is-link to="/address" />
           <van-cell title="设置" is-link @click="show = true"/>
           <van-cell title="关于惠淘" value="1.0.0"/>
