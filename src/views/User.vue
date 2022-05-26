@@ -3,7 +3,7 @@
     <div class="head-bg">
 
       <div class="userInfo">
-        <van-image :src="'http://api.w0824.com/'+ $store.state.userInfo.avatar">
+        <van-image @click="imgPreview" :src="'http://api.w0824.com/'+ $store.state.userInfo.avatar">
           <template v-slot:loading>
             <van-loading type="spinner" size="20"/>
           </template>
@@ -14,7 +14,7 @@
       <div class="setting">
         <van-cell-group>
           <van-cell title="我的订单" is-link to="/order" value="全部订单"/>
-          <van-cell title="收货地址" is-link to="/address" />
+          <van-cell title="收货地址" is-link to="/address"/>
           <van-cell title="设置" is-link @click="show = true"/>
           <van-cell title="关于惠淘" value="1.0.0"/>
           <van-button type="danger" block @click="signOut">退出登录</van-button>
@@ -65,6 +65,16 @@ export default {
       }
       this.$toast(result.message)
     },
+    // 打开头像
+    imgPreview() {
+      ImagePreview({
+          images: [
+            'http://api.w0824.com/'+ this.$store.state.userInfo.avatar
+          ],
+          closeable: true,
+        }
+      )
+    }
   },
 }
 </script>
