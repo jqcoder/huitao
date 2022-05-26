@@ -5,7 +5,9 @@ import store from './store'
 import './vantui'
 import './assets/css/normalize.css'
 import '../node_modules/nprogress/nprogress.css'
+import VueClipboard from 'vue-clipboard2'
 
+Vue.use(VueClipboard)
 Vue.config.productionTip = false
 
 new Vue({

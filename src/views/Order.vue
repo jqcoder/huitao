@@ -1,32 +1,24 @@
 <template>
   <div class="order">
     <van-tabs v-model="active" @click="changeTab">
-
-      <van-tab v-for="item in tabList" :title="item.text" :name="item.status">内容 1</van-tab>
-
-
-      <!--      <van-tab title="全部">-->
-      <!--&lt;!&ndash;        <van-card&ndash;&gt;-->
-      <!--&lt;!&ndash;          v-for="item in AllOrder"&ndash;&gt;-->
-      <!--&lt;!&ndash;          num="2"&ndash;&gt;-->
-      <!--&lt;!&ndash;          :price="item.total_price | zeroPadding"&ndash;&gt;-->
-      <!--&lt;!&ndash;          :desc="item.pay_way"&ndash;&gt;-->
-      <!--&lt;!&ndash;          title="飞利浦（PHILIPS）DVP3690 全高清DVD影碟机播放器"&ndash;&gt;-->
-      <!--&lt;!&ndash;          thumb="https://img01.yzcdn.cn/vant/ipad.jpeg"&ndash;&gt;-->
-      <!--&lt;!&ndash;        >&ndash;&gt;-->
-      <!--&lt;!&ndash;          <template #tags>&ndash;&gt;-->
-      <!--&lt;!&ndash;            <span>下单时间:{{ item.add_time | formatTime }}</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;          </template>&ndash;&gt;-->
-      <!--&lt;!&ndash;          <template #num>&ndash;&gt;-->
-      <!--&lt;!&ndash;            <span>共{{ item.number }}件</span>&ndash;&gt;-->
-      <!--&lt;!&ndash;          </template>&ndash;&gt;-->
-      <!--&lt;!&ndash;          <template #footer>&ndash;&gt;-->
-      <!--&lt;!&ndash;            <van-button size="mini" color="#3589f7">已完成</van-button>&ndash;&gt;-->
-      <!--&lt;!&ndash;            <van-button size="mini" color="#fc976d">去评价</van-button>&ndash;&gt;-->
-      <!--&lt;!&ndash;            <van-button size="mini" color="#ea1128">客服</van-button>&ndash;&gt;-->
-      <!--&lt;!&ndash;          </template>&ndash;&gt;-->
-      <!--&lt;!&ndash;        </van-card>&ndash;&gt;-->
-      <!--      </van-tab>-->
+      <van-tab v-for="item in tabList" :key="item.status" :title="item.text" :name="item.status">
+        <van-card
+          v-for="item in orderData"
+          :key="item.order_id"
+          num="2"
+          :price="item.total_price | zeroPadding"
+          :desc="item.pay_way"
+          :title="item.goodsInfo[0].title"
+          :thumb="item.goodsInfo[0].thumb_path"
+        >
+          <template #num>共 {{ item.number }} 件 </template>
+          <template #tags>下单时间：{{item.add_time | formatTime}}</template>
+          <template #footer>
+            <van-button size="mini" v-clipboard:copy="item.order_id" @click="onCopy" >复制订单号</van-button>
+            <van-button size="mini">...</van-button>
+          </template>
+        </van-card>
+      </van-tab>
 
     </van-tabs>
   </div>
@@ -34,6 +26,7 @@
 
 <script>
 import {fetchGetUserOrder} from '@/api/order'
+import {fetchGoodscar} from '@/api/goodscar'
 
 import moment from 'moment'
 
@@ -51,19 +44,46 @@ export default {
       ]
     }
   },
+  computed: {
+    orderData() {
+      if(this.active === 'All'){
+        return this.AllOrder
+      }
+      return this.AllOrder.filter(item=>{
+        return item.status === Number(this.active)
+      })
+    }
+  },
   methods: {
     async getAllOrder() {
       let user_id = this.$store.state.userInfo.id
+      if (!user_id) {
+        return
+      }
       let orderData = await fetchGetUserOrder(user_id)
 
+      // 并发获取每个订单的商品数据
+      let promiseArr = []
+      orderData.forEach(item => {
+        promiseArr.push(fetchGoodscar(item.goods_ids))
+      })
+      let goodsInfo = await Promise.all(promiseArr)
 
-      console.log(orderData)
-      console.log()
+      // 给每个订单数据加上商品的数据
+      orderData = orderData.map((item, index) => {
+        item.goodsInfo = goodsInfo[index].message
+        return item
+      })
 
+      this.AllOrder = orderData
     },
     changeTab(name) {
-      console.log(name)
+      console.log(this.orderData)
     },
+    onCopy(e) {
+      e.stopPropagation();// 阻止事件冒泡
+      this.$toast('复制成功')
+    }
   },
   created() {
     this.getAllOrder()
@@ -74,8 +94,7 @@ export default {
       return value.toFixed(2, 0)
     },
     formatTime(value) {
-      console.log(value)
-      return moment(value).format("YYYY-MM-DD HH:mm:ss")
+      return moment.unix(value).format("YYYY-MM-DD HH:mm:ss")
     }
   }
 }

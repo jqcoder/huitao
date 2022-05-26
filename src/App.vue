@@ -39,6 +39,10 @@ html {
   scroll-behavior: smooth;
 }
 
+body{
+  background-color: #f6f6f6;
+}
+
 #app {
   color: #333;
   min-width: 350px;

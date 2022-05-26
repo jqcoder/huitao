@@ -57,7 +57,7 @@
     </div>
 
     <!--购物车核算-->
-    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="isNoSubmit" @submit="onSubmit" button-text="提交订单">
+    <van-submit-bar :price="getGoodsCarPriceTotal" :disabled="isNoSubmit || !hasAddress" @submit="onSubmit" button-text="提交订单">
       <van-checkbox :value="getGoodsAllStatus"
                     @click="updateAllCheck(getGoodsAllStatus)">全选
       </van-checkbox>
@@ -178,6 +178,8 @@ export default {
       }
     },
     async onSubmit() {
+      // 获取数据-提交订单-清空购物车
+
       let user_id = this.$store.state.userInfo.id
       if (!user_id) {
         this.$router.push('/login')
@@ -233,8 +235,6 @@ export default {
 
 <style lang="scss" scoped>
 .shopcar {
-  background-color: #f6f6f6;
-  height: 100vh;
 
   .have-goods {
     padding-bottom: 134px;

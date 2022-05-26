@@ -77,14 +77,14 @@ export default {
     },
     async getProductData() {
       let res = await fetchProductList(1, 12)
-      if(!res.message){
+      if (!res.message) {
         this.product = []
-      }else{
+      } else {
         this.product = res.message
       }
 
     },
-    GoodsDetails(id){
+    GoodsDetails(id) {
       this.$router.push(`/goodsDetail/${id}`)
     }
   },
@@ -157,11 +157,18 @@ export default {
   }
 
   // 九宫格
-  .van-grid{
-    .van-grid-item{
+  .van-grid {
+    width: 95%;
+    margin: 20px auto 0;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+
+    .van-grid-item {
       border-radius: 10px;
       overflow: hidden;
-      .van-grid-item__content{
+
+      .van-grid-item__content {
         border-radius: 10px;
       }
     }

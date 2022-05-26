@@ -29,7 +29,6 @@
       close-on-click-action
       @select="selectItem"
     />
-
     <van-uploader v-show="false" ref="uploadImg" :after-read="afterRead"/>
   </div>
 </template>
@@ -66,9 +65,6 @@ export default {
       }
       this.$toast(result.message)
     },
-    aaa(){
-
-    }
   },
 }
 </script>
