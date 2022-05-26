@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <van-sticky>
-    <van-nav-bar
-      :title="title"
-      left-arrow
-      @click-left="$router.back()"
-      v-show="isShowNavBar"
-    />
+      <van-nav-bar
+        :title="title"
+        left-arrow
+        @click-left="$router.back()"
+        v-show="isShowNavBar"
+      />
     </van-sticky>
 
     <router-view></router-view>
@@ -39,8 +39,14 @@ html {
   scroll-behavior: smooth;
 }
 
-body{
-  background-color: #f6f6f6;
+@font-face {
+  font-family: Emoji;
+  src: local("Apple Color Emojiji"), local("Segoe UI Emoji"), local("Segoe UI Symbol"), local("Noto Color Emoji");
+  unicode-range: U+1F000-1F644, U+203C-3299;
+}
+
+body {
+  font-family: system-ui, —apple-system, Segoe UI, Rototo, Emoji, Helvetica, Arial, sans-serif;
 }
 
 #app {
