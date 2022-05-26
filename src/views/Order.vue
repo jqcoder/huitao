@@ -3,6 +3,7 @@
     <van-tabs v-model="active" @click="changeTab">
       <van-tab v-for="item in tabList" :key="item.status" :title="item.text" :name="item.status">
         <van-card
+          @click="$router.push(`/orderdetail/${item.order_id}`)"
           v-for="item in orderData"
           :key="item.order_id"
           num="2"
@@ -14,8 +15,16 @@
           <template #num>共 {{ item.number }} 件 </template>
           <template #tags>下单时间：{{item.add_time | formatTime}}</template>
           <template #footer>
-            <van-button size="mini" v-clipboard:copy="item.order_id" @click="onCopy" >复制订单号</van-button>
-            <van-button size="mini">...</van-button>
+            <template v-if="item.status === 0">
+              <van-button size="mini" v-clipboard:copy="item.order_id"  type="danger" @click="onCopy" >复制订单号</van-button>
+              <van-button size="mini" type="danger" >立即付款</van-button>
+            </template>
+            <van-button v-if="item.status === 1 && item.is_out === 0" size="mini" type="danger">提醒发货</van-button>
+            <template v-if="item.is_take === 1 && item.is_out === 1 && item.status === 2">
+              <van-button size="mini" type="info">已完成</van-button>
+              <van-button size="mini" type="warning">去评价</van-button>
+            </template>
+            <van-button size="mini" type="danger" @click.stop="callPhone">客服</van-button>
           </template>
         </van-card>
       </van-tab>
@@ -77,12 +86,15 @@ export default {
 
       this.AllOrder = orderData
     },
-    changeTab(name) {
+    changeTab() {
       console.log(this.orderData)
     },
     onCopy(e) {
       e.stopPropagation();// 阻止事件冒泡
       this.$toast('复制成功')
+    },
+    callPhone(){
+      window.location.href = "tel:13412342234"
     }
   },
   created() {

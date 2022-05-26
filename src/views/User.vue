@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       show: false,
-      actions: [{name: '更换头像'}, {name: '下载头像'}],
+      actions: [{name: '更换头像'}, {name: '清除缓存'}],
     }
   },
   methods: {
@@ -53,7 +53,14 @@ export default {
     selectItem(item) {
       if (item.name === '更换头像') {
         this.$refs.uploadImg.$refs.input.click()
+        return
       }
+
+      if (item.name === '清除缓存') {
+        this.$toast('清楚成功')
+        return
+      }
+
     },
     async afterRead(file) {
       let result = await fetchUpdateUserImg({

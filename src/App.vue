@@ -25,7 +25,7 @@ export default {
   watch: {
     $route: {
       handler(newRouter) {
-        this.isShowNavBar = !newRouter.meta.isIndexPage
+        this.isShowNavBar = !newRouter.meta.isIndexPage || newRouter.meta.showNavbar
         this.title = newRouter.meta.title ? newRouter.meta.title : '惠淘'
       },
       immediate: true
@@ -46,6 +46,7 @@ html {
 }
 
 body {
+  background-color: #f6f6f6;
   font-family: system-ui, —apple-system, Segoe UI, Rototo, Emoji, Helvetica, Arial, sans-serif;
 }
 

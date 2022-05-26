@@ -37,6 +37,9 @@ import {
   Icon,
   Tab,
   Tabs,
+  Popup,
+  Step,
+  Steps
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -78,3 +81,6 @@ Vue.use(AddressList)
 Vue.use(Icon)
 Vue.use(Tab)
 Vue.use(Tabs)
+Vue.use(Popup)
+Vue.use(Step)
+Vue.use(Steps)

@@ -203,7 +203,7 @@ export default {
       });
 
       // 提交订单
-      let {message, status} = await fetchCommitOrder(orderData)
+      let { status} = await fetchCommitOrder(orderData)
 
       // 提交成功-清空购物车（还有vuex）
       if (status === 0) {
@@ -224,12 +224,6 @@ export default {
     // 处理用户地址
     this._fetchGetUserAddress()
   },
-  filters: {
-    // 价格补零
-    zeroPadding(value) {
-      return value.toFixed(2, 0)
-    }
-  }
 }
 </script>
 

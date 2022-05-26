@@ -6,9 +6,15 @@
         <div class="logo">
           <img src="../assets/logo.png" alt="">
         </div>
-        <van-search shape="round" placeholder="请输入搜索关键词"/>
+        <van-search shape="round" @focus="$router.push('/index/home/search'+'?')" placeholder="请输入搜索关键词"/>
       </div>
     </van-sticky>
+
+    <!-- 搜索框   -->
+    <van-popup v-model="show" position="top" :close-on-click-overlay="false" :style="{ height: '30%' }" :duration="0.2" >
+      <router-view></router-view>
+    </van-popup>
+
 
     <!-- swiper-bg -->
     <div class="swiper-bg"></div>
@@ -52,6 +58,7 @@ export default {
   name: 'home',
   data() {
     return {
+      show: false,
       carouselData: [],
       product: [],
       menuData: [
@@ -86,11 +93,19 @@ export default {
     },
     GoodsDetails(id) {
       this.$router.push(`/goodsDetail/${id}`)
-    }
+    },
   },
   components: {
     product,
     backTop
+  },
+  watch:{
+    $route: {
+      handler(newRouter) {
+        this.show = newRouter.name=== 'search'
+      },
+      immediate: true
+    }
   }
 }
 </script>

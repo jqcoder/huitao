@@ -23,14 +23,26 @@ const routes = [
         meta: {
           name: 'home',
           isIndexPage: true
-        }
+        },
+        children: [
+          {
+            path: 'search',
+            component: () => import('@/views/Search'),
+            name: 'search',
+            meta: {
+              isIndexPage: true,
+              showNavbar: false,
+            }
+          }
+        ]
       },
       {
         path: 'shopcar',
         component: () => import('@/views/Shopcar'),
         meta: {
           name: 'shopcar',
-          isIndexPage: false,
+          isIndexPage: true,
+          showNavbar: true,
           title: '购物车',
           // LoginPermission: true // 登录权限
         }
@@ -40,7 +52,8 @@ const routes = [
         component: () => import('@/views/User'),
         meta: {
           name: 'user',
-          isIndexPage: false,
+          isIndexPage: true,
+          showNavbar: true,
           LoginPermission: true // 登录权限
         }
       }
@@ -101,6 +114,13 @@ const routes = [
     meta: {
       title: '我的订单'
     }
+  },
+  {
+    path: '/orderdetail/:order_id',
+    component: () => import('@/views/OrderDetail'),
+    meta: {
+      title: '订单详情'
+    }
   }
 ]
 
@@ -126,7 +146,7 @@ router.beforeEach((to, from, next) => {
   return false
 })
 
-router.afterEach((to, from) => {
+router.afterEach(() => {
   NProgress.done();
   return false
 })
