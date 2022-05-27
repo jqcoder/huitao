@@ -39,7 +39,9 @@ import {
   Tabs,
   Popup,
   Step,
-  Steps
+  Steps,
+  DropdownMenu,
+  DropdownItem
 } from 'vant'
 import 'vant/lib/index.css'
 
@@ -84,3 +86,5 @@ Vue.use(Tabs)
 Vue.use(Popup)
 Vue.use(Step)
 Vue.use(Steps)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)

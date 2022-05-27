@@ -21,20 +21,35 @@ export default {
     }
   },
   methods: {
-    scrollFun () {
+    scrollFun() {
       let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
       scrollTop > this.scrollTop ? this.isShow = true : this.isShow = false
     },
     backTop() {
       document.documentElement.scrollTop = document.body.scrollTop = 0
+    },
+    throttle(fn, delay) {
+      // 记录上一次函数触发的时间
+      let lastTime = 0; // 闭包变量，用来记录保存上一次的执行时间
+      return function () {
+        // 记录当前函数触发的时间
+        let nowTime = Date.now();
+        let context = this;
+        if (nowTime - lastTime > delay) {
+          // 修正this指向问题
+          fn.apply(context, arguments);
+          // 更新上一次的时间
+          lastTime = nowTime;
+        }
+      }
     }
   },
-  mounted () {
+  mounted() {
     this.scrollFun()
-    document.addEventListener('scroll', this.scrollFun)
+    document.addEventListener('scroll', this.throttle(this.scrollFun, 300))
   },
-  destroyed () {
-    document.removeEventListener('scroll', this.scrollFun)
+  destroyed() {
+    document.removeEventListener('scroll', this.throttle(this.scrollFun, 300))
   }
 }
 </script>

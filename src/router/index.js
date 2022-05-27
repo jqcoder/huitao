@@ -68,6 +68,7 @@ const routes = [
   },
   {
     path: '/goodsdetail/:id',
+    name: 'goodsDetail',
     component: () => import('@/views/GoodsDetail'),
     meta: {
       title: '商品详情'
@@ -120,6 +121,15 @@ const routes = [
     component: () => import('@/views/OrderDetail'),
     meta: {
       title: '订单详情'
+    }
+  },
+  {
+    path: '/search-result/:searchVal',
+    component: () => import('@/views/Search-Result'),
+    meta: {
+      title: '搜索结果',
+      isIndexPage: true,
+      showNavbar: false,
     }
   }
 ]

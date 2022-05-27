@@ -1,7 +1,7 @@
 <template>
   <div class="order-detail">
     <div class="order-status">
-      <div>交易成功</div>
+      <div>{{orderStatus}}</div>
       <img src="../assets/images/car2.png" alt="">
     </div>
 
@@ -120,11 +120,26 @@ export default {
       kuaiDi: []
     }
   },
+  computed: {
+    orderStatus(){
+      if(this.orderInfo.status === 0){
+        return '你的商品未付款'
+      }
+      if(this.orderInfo.status === 1 && this.orderInfo.is_out === 1 && this.orderInfo.is_take === 0){
+        return '你的商品正在运输中'
+      }
+      if(this.orderInfo.status === 2 && this.orderInfo.is_out === 1 && this.orderInfo.is_take === 1){
+        return '交易成功'
+      }
+    }
+  }
+  ,
   methods: {
     onCopy() {
       event.stopPropagation(); // 阻止事件冒泡
       this.$toast("订单号复制成功");
     },
+
     // 立即支付
     payment() {
       this.$dialog.confirm({

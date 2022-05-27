@@ -1,11 +1,13 @@
 <template>
   <div>
     <router-view></router-view>
+
     <van-tabbar v-model="active" active-color="#ee0a24" inactive-color="#000">
       <van-tabbar-item icon="home-o" to="/index/home">首页</van-tabbar-item>
       <van-tabbar-item icon="cart-o" to="/index/shopcar" :badge="getGoodsCQuantity">购物车</van-tabbar-item>
       <van-tabbar-item icon="manager-o" to="/index/user">我的</van-tabbar-item>
     </van-tabbar>
+
   </div>
 </template>
 

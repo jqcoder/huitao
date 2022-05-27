@@ -9,7 +9,7 @@ export default new Vuex.Store({
   state: {
     goodsCar: [],
     userInfo: {},
-    token: ""
+    token: "",
   },
   getters: {
     // 获取购物车总价格
@@ -69,7 +69,7 @@ export default new Vuex.Store({
     getAllGoodsNumTotal(state) {
       let Total = 0
       state.goodsCar.forEach(item => {
-        if(item.isCheck) Total += item.buyNum
+        if (item.isCheck) Total += item.buyNum
       })
       return Total
     },
@@ -77,7 +77,7 @@ export default new Vuex.Store({
     getAllGoodsChecked(state) {
       let Total = []
       state.goodsCar.forEach(item => {
-        if(item.isCheck) Total.push(item.id)
+        if (item.isCheck) Total.push(item.id)
       })
       return Total.join()
     },
@@ -128,7 +128,7 @@ export default new Vuex.Store({
       state.goodsCar.splice(findIndex, 1)
     },
     // 清空购物车
-    clearGoodsCar(state){
+    clearGoodsCar(state) {
       state.goodsCar = []
     },
     // 添加用户信息和token
@@ -142,9 +142,10 @@ export default new Vuex.Store({
       state.token = ''
       state.goodsCar = []
     },
+    // 更新用户头像
     uploadUserImg(state, src) {
       state.userInfo.avatar = src
-    }
+    },
   },
   actions: {},
   modules: {},

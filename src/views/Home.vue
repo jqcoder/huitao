@@ -11,8 +11,8 @@
     </van-sticky>
 
     <!-- 搜索框   -->
-    <van-popup v-model="show" position="top" :close-on-click-overlay="false" :style="{ height: '30%' }" :duration="0.2" >
-      <router-view></router-view>
+    <van-popup v-model="show" position="top" :close-on-click-overlay="false" :style="{ height: '50%' }" :duration="0.2" >
+        <router-view></router-view>
     </van-popup>
 
 
