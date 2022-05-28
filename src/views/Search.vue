@@ -46,12 +46,11 @@
 </template>
 
 <script>
-let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || []
 export default {
   name: "Search",
   data() {
     return {
-      searchHistory,
+      searchHistory: '',
       show: true,
       value: '',
       showHotSearch: true,
@@ -64,6 +63,9 @@ export default {
   },
   methods: {
     onSearch(val) {
+      if (this.value.trim() === '') {
+        return;
+      }
       if (this.searchHistory.includes(val)) {
         this.$router.push(`/search-result/${val}`)
         return;
@@ -79,6 +81,7 @@ export default {
 
   },
   mounted() {
+    this.searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || []
     this.$refs.input.children[0].children[0].__vue__.$refs.input.focus()
   }
 }

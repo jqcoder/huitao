@@ -86,6 +86,7 @@ export default {
   .goodsList {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-around;
   }
 }
 </style>
